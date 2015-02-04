@@ -1,5 +1,9 @@
 [package]
-
-name = "machine-learning"
+name = "machinelearning"
 version = "0.0.1"
 authors = ["jakubkonka <jakub.konka@strath.ac.uk>"]
+
+[lib]
+name = "machinelearning"
+path = "src/lib.rs"
+
