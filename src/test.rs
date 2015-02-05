@@ -37,3 +37,11 @@ fn test_vector_multiplication() {
     let v2 = Vector::from_slice(&[1.0,2.0,3.0]);
     assert_eq!((v1 * v2).unwrap(), 6.0);
 }
+
+#[test]
+fn test_vector_subtraction() {
+    let v1 = Vector::zeros(3);
+    let v2 = Vector::from_slice(&[1.0,2.0,3.0]);
+    let exp = Vector::from_slice(&[-1.0,-2.0,-3.0]);
+    assert_eq!((v1 - v2).unwrap(), exp);
+}

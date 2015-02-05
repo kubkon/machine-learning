@@ -1,5 +1,5 @@
 use std::num::Float;
-use std::ops::{Add,Mul};
+use std::ops::{Add,Mul,Sub};
 use std::iter::repeat;
 
 #[derive(Debug)]
@@ -93,5 +93,13 @@ impl Mul for Vector {
 
     fn mul(self, _rhs: Vector) -> Option<f64> {
         self.mul(_rhs)
+    }
+}
+
+impl Sub for Vector {
+    type Output = Option<Vector>;
+
+    fn sub(self, _rhs: Vector) -> Option<Vector> {
+        self + _rhs.scalar_mul(-1.0)
     }
 }
