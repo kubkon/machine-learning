@@ -1,11 +1,20 @@
+use vector::Vector;
 use linear_regression::LinearRegression;
 
 #[test]
 fn test_linear_regression() {
-    let xs = [1.0f64, 2.0, 3.0];
-    let ys = [1.0f64, 2.0, 3.0];
+    let xs = [1.0, 2.0, 3.0];
+    let ys = [1.0, 2.0, 3.0];
     let mut model = LinearRegression::new(0.1, 1e-12);
     model.fit(&xs[], &ys[]);
     assert_almost_eq!(model.params[0], 0.0, 1e-3);
     assert_almost_eq!(model.params[1], 1.0, 1e-3);
+}
+
+#[test]
+fn test_vector_addition() {
+    let v1 = Vector::from_slice(&[1.0,2.0,3.0]);
+    let v2 = Vector::from_slice(&[3.0,4.0,5.0]);
+    let exp = Vector::from_slice(&[4.0,6.0,8.0]);
+    assert_eq!(v1 + v2, exp);
 }
