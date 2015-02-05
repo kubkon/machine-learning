@@ -45,15 +45,19 @@ impl PartialEq for Vector {
 }
 
 impl Add for Vector {
-    type Output = Vector;
+    type Output = Option<Vector>;
 
-    fn add(self, _rhs: Vector) -> Vector {
-        // FIX:ME check for equal sizes
-        let xs: Vec<f64> = self.elements
-                               .iter()
-                               .zip(_rhs.elements.iter())
-                               .map(|(&x, &y)| x + y)
-                               .collect();
-        Vector::from_slice(xs.as_slice())
+    fn add(self, _rhs: Vector) -> Option<Vector> {
+        // check for equal sizes
+        if self.size != _rhs.size {
+            None
+        } else {
+            let xs: Vec<f64> = self.elements
+                                   .iter()
+                                   .zip(_rhs.elements.iter())
+                                   .map(|(&x, &y)| x + y)
+                                   .collect();
+            Some(Vector::from_slice(&xs[]))
+        }
     }
 }

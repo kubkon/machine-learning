@@ -16,5 +16,9 @@ fn test_vector_addition() {
     let v1 = Vector::from_slice(&[1.0,2.0,3.0]);
     let v2 = Vector::from_slice(&[3.0,4.0,5.0]);
     let exp = Vector::from_slice(&[4.0,6.0,8.0]);
-    assert_eq!(v1 + v2, exp);
+    assert_eq!((v1 + v2).unwrap(), exp);
+
+    let v3 = Vector::zeros(2);
+    let v4 = Vector::zeros(3);
+    assert_eq!(v3 + v4, None);
 }
