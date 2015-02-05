@@ -1,5 +1,5 @@
 use std::num::Float;
-use std::ops::Add;
+use std::ops::{Add,Mul};
 use std::iter::repeat;
 
 #[derive(Debug)]
@@ -33,6 +33,42 @@ impl Vector {
     pub fn len(self) -> usize {
         self.size
     }
+    pub fn add(self, other: Vector) -> Option<Vector> {
+        // check for equal sizes
+        if self.size != other.size {
+            None
+        } else {
+            let xs: Vec<f64> = self.elements
+                                   .iter()
+                                   .zip(other.elements.iter())
+                                   .map(|(&x, &y)| x + y)
+                                   .collect();
+            Some(Vector::from_slice(&xs[]))
+        }
+
+    }
+    pub fn scalar_mul(self, a: f64) -> Vector {
+        let xs: Vec<f64> = self.elements
+                               .iter()
+                               .map(|&x| a * x)
+                               .collect();
+        Vector {
+            elements: xs,
+            size: self.size
+        }
+    }
+    pub fn mul(self, other: Vector) -> Option<f64> {
+        // check for equal sizes
+        if self.size != other.size {
+            None
+        } else {
+            let x: f64 = self.elements
+                             .iter()
+                             .zip(other.elements.iter())
+                             .fold(0.0, |acc, (&x, &y)| acc + x*y);
+            Some(x)
+        }
+    }
 }
 
 impl PartialEq for Vector {
@@ -48,16 +84,14 @@ impl Add for Vector {
     type Output = Option<Vector>;
 
     fn add(self, _rhs: Vector) -> Option<Vector> {
-        // check for equal sizes
-        if self.size != _rhs.size {
-            None
-        } else {
-            let xs: Vec<f64> = self.elements
-                                   .iter()
-                                   .zip(_rhs.elements.iter())
-                                   .map(|(&x, &y)| x + y)
-                                   .collect();
-            Some(Vector::from_slice(&xs[]))
-        }
+        self.add(_rhs)
+    }
+}
+
+impl Mul for Vector {
+    type Output = Option<f64>;
+
+    fn mul(self, _rhs: Vector) -> Option<f64> {
+        self.mul(_rhs)
     }
 }
