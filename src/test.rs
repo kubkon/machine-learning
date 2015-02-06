@@ -45,3 +45,12 @@ fn test_vector_subtraction() {
     let exp = Vector::from_slice(&[-1.0,-2.0,-3.0]);
     assert_eq!((v1 - v2).unwrap(), exp);
 }
+
+#[test]
+fn test_vector_iter() {
+    let xs = [1.0,2.0,3.0,4.0];
+    let v1 = Vector::from_slice(&xs);
+    for (i, &v) in v1.iter().enumerate() {
+        assert_eq!(xs[i], v);
+    }
+}
