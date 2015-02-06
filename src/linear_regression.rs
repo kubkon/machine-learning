@@ -25,12 +25,10 @@ impl<'r> LinearRegression<'r> {
 
     fn cost_func(&self, xs: &Vector, ys: &Vector) -> f64 {
         let v = (self.model_func(xs).sub(ys)).unwrap();
-        let v_copy = v.clone();
-        let n = xs.len() as f64;
-        v.mul(&v_copy).unwrap() / (2.0 * n)
+        v.mul(&v).unwrap() / (2.0 * xs.len() as f64)
     }
 
-    fn cost_deriv(&self, xs: &Vector, ys: &Vector) -> Vector<'r> {
+    fn cost_gradient(&self, xs: &Vector, ys: &Vector) -> Vector<'r> {
         let n = xs.len();
         let v = (self.model_func(xs).sub(ys)).unwrap().scalar_mul(1.0 / n as f64);
         let d1 = (Vector::ones(n).mul(&v)).unwrap();
@@ -45,8 +43,8 @@ impl<'r> LinearRegression<'r> {
 
         while cost_diff > self.tolerance {
             let priori = self.cost_func(&xs_v, &ys_v);
-            let derivs = self.cost_deriv(&xs_v, &ys_v);
-            self.params = (self.params.sub(&derivs.scalar_mul(self.step))).unwrap();
+            let gradient = self.cost_gradient(&xs_v, &ys_v);
+            self.params = (self.params.sub(&gradient.scalar_mul(self.step))).unwrap();
             let posteriori = self.cost_func(&xs_v, &ys_v);
             cost_diff = (priori - posteriori).abs();
         }

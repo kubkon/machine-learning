@@ -69,6 +69,10 @@ impl<'r> Vector<'r> {
         }
 
     }
+    
+    pub fn sub(&self, other: &Vector) -> Option<Vector<'r>> {
+        self.add(&other.scalar_mul(-1.0))
+    }
 
     pub fn mul(&self, other: &Vector) -> Option<f64> {
         // check for equal sizes
@@ -81,10 +85,6 @@ impl<'r> Vector<'r> {
                              .fold(0.0, |acc, (&x, &y)| acc + x*y);
             Some(x)
         }
-    }
-
-    pub fn sub(&self, other: &Vector) -> Option<Vector<'r>> {
-        self.add(&other.scalar_mul(-1.0))
     }
 }
 
