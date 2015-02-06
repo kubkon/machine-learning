@@ -1,4 +1,6 @@
 #![crate_name = "machinelearning"]
+#![feature(core)]
+#![feature(collections)]
 
 pub mod vector;
 pub mod linear_regression;

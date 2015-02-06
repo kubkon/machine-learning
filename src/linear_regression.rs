@@ -17,35 +17,37 @@ impl<'r> LinearRegression<'r> {
         }
     }
 
-    fn model_func(self, xs: Vector) -> Vector {
+    fn model_func(&'r self, xs: &Vector) -> Vector<'r> {
         (Vector::ones(xs.len()).scalar_mul(*self.params.get(0)) +
          xs.scalar_mul(*self.params.get(1))).unwrap()
     }
 
-    // pub fn fit(&mut self, xs: &[f64], ys: &[f64]) {
-    //     let m = xs.len() as f64;
-    //     let mut cost_diff = 1.0f64;
+    fn cost_func(&'r self, xs: &Vector, ys: &Vector) -> f64 {
+        let v = (self.model_func(xs)._sub(ys)).unwrap();
+        let v_copy = v.clone();
+        let n = xs.len() as f64;
+        (v * v_copy).unwrap() / (2.0 * n)
+    }
 
-    //     while cost_diff > self.tolerance {
-    //         cost_diff = xs.iter()
-    //                       .zip(ys.iter())
-    //                       .map(|(&x, &y)| (self.params[0] + self.params[1]*x - y).powi(2))
-    //                       .fold(0.0, |acc, x| acc + x) / (2.0 * m);
-    //         let d1 = xs.iter()
-    //                    .zip(ys.iter())
-    //                    .map(|(&x, &y)| self.params[0] + self.params[1]*x - y)
-    //                    .fold(0.0, |acc, x| acc + x) / m;
-    //         let d2 = xs.iter()
-    //                    .zip(ys.iter())
-    //                    .map(|(&x, &y)| x * (self.params[0] + self.params[1]*x - y))
-    //                    .fold(0.0, |acc, x| acc + x) / m;
-    //         self.params[0] = self.params[0] - self.step * d1;
-    //         self.params[1] = self.params[1] - self.step * d2;
-    //         let cost = xs.iter()
-    //                      .zip(ys.iter())
-    //                      .map(|(&x, &y)| (self.params[0] + self.params[1]*x - y).powi(2))
-    //                      .fold(0.0, |acc, x| acc + x) / (2.0 * m);
-    //         cost_diff = (cost_diff - cost).abs();
-    //     }
-    // }
+    fn cost_deriv(&'r self, xs: &Vector, ys: &Vector) -> Vector<'r> {
+        let n = xs.len();
+        let v = (self.model_func(xs)._sub(ys)).unwrap().scalar_mul(1.0 / n as f64);
+        let d1 = (Vector::ones(n)._mul(&v)).unwrap();
+        let d2 = (xs._mul(&v)).unwrap();
+        Vector::from_slice(&[d1, d2])
+    }
+
+    pub fn fit(&'r mut self, xs: &[f64], ys: &[f64]) {
+        let xs_v = Vector::from_slice(xs);
+        let ys_v = Vector::from_slice(ys);
+        let mut cost_diff = 1.0f64;
+
+        while cost_diff > self.tolerance {
+            let priori = self.cost_func(&xs_v, &ys_v);
+            let derivs = self.cost_deriv(&xs_v, &ys_v);
+            self.params = (self.params._sub(&derivs.scalar_mul(self.step))).unwrap();
+            let posteriori = self.cost_func(&xs_v, &ys_v);
+            cost_diff = (priori - posteriori).abs();
+        }
+    }
 }

@@ -1,4 +1,3 @@
-use std::num::Float;
 use std::ops::{Add,Mul,Sub};
 use std::iter::repeat;
 use std::slice::Iter;
@@ -46,8 +45,18 @@ impl<'r> Vector<'r> {
     pub fn get(&'r self, index: usize) -> &'r f64 {
         &self.elements[index]
     }
+    
+    pub fn scalar_mul(&'r self, a: f64) -> Vector<'r> {
+        let xs: Vec<f64> = self.elements
+                               .iter()
+                               .map(|&x| a * x)
+                               .collect();
+        Vector {
+            elements: xs,
+        }
+    }
 
-    pub fn add(self, other: Vector) -> Option<Vector<'r>> {
+    pub fn _add(&'r self, other: &Vector) -> Option<Vector<'r>> {
         // check for equal sizes
         if self.elements.len() != other.elements.len() {
             None
@@ -62,17 +71,7 @@ impl<'r> Vector<'r> {
 
     }
 
-    pub fn scalar_mul(self, a: f64) -> Vector<'r> {
-        let xs: Vec<f64> = self.elements
-                               .iter()
-                               .map(|&x| a * x)
-                               .collect();
-        Vector {
-            elements: xs,
-        }
-    }
-
-    pub fn mul(self, other: Vector) -> Option<f64> {
+    pub fn _mul(&'r self, other: &Vector) -> Option<f64> {
         // check for equal sizes
         if self.elements.len() != other.elements.len() {
             None
@@ -83,6 +82,16 @@ impl<'r> Vector<'r> {
                              .fold(0.0, |acc, (&x, &y)| acc + x*y);
             Some(x)
         }
+    }
+
+    pub fn _sub(&'r self, other: &Vector) -> Option<Vector<'r>> {
+        self._add(&other.scalar_mul(-1.0))
+    }
+}
+
+impl<'r> Clone for Vector<'r> {
+    fn clone(&self) -> Vector<'r> {
+        Vector::from_slice(self.as_slice())
     }
 }
 
@@ -99,7 +108,7 @@ impl<'r> Add for Vector<'r> {
     type Output = Option<Vector<'r>>;
 
     fn add(self, _rhs: Vector) -> Option<Vector<'r>> {
-        self.add(_rhs)
+        self._add(&_rhs)
     }
 }
 
@@ -107,7 +116,7 @@ impl<'r> Mul for Vector<'r> {
     type Output = Option<f64>;
 
     fn mul(self, _rhs: Vector) -> Option<f64> {
-        self.mul(_rhs)
+        self._mul(&_rhs)
     }
 }
 
