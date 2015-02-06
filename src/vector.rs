@@ -31,7 +31,7 @@ impl<'r> Vector<'r> {
         }
     }
 
-    pub fn len(self) -> usize {
+    pub fn len(&'r self) -> usize {
         self.elements.len()
     }
 
@@ -41,6 +41,10 @@ impl<'r> Vector<'r> {
 
     pub fn as_slice(&'r self) -> &'r [f64] {
         self.elements.as_slice()
+    }
+
+    pub fn get(&'r self, index: usize) -> &'r f64 {
+        &self.elements[index]
     }
 
     pub fn add(self, other: Vector) -> Option<Vector<'r>> {
