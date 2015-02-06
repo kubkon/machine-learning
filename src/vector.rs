@@ -29,7 +29,7 @@ impl<'r> Vector<'r> {
         }
     }
 
-    pub fn len(&'r self) -> usize {
+    pub fn len(&self) -> usize {
         self.elements.len()
     }
 
@@ -41,11 +41,11 @@ impl<'r> Vector<'r> {
         self.elements.as_slice()
     }
 
-    pub fn get(&'r self, index: usize) -> &'r f64 {
-        &self.elements[index]
+    pub fn get(&self, index: usize) -> f64 {
+        self.elements[index]
     }
     
-    pub fn scalar_mul(&'r self, a: f64) -> Vector<'r> {
+    pub fn scalar_mul(&self, a: f64) -> Vector<'r> {
         let xs: Vec<f64> = self.elements
                                .iter()
                                .map(|&x| a * x)
@@ -55,7 +55,7 @@ impl<'r> Vector<'r> {
         }
     }
 
-    pub fn add(&'r self, other: &Vector) -> Option<Vector<'r>> {
+    pub fn add(&self, other: &Vector) -> Option<Vector<'r>> {
         // check for equal sizes
         if self.elements.len() != other.elements.len() {
             None
@@ -70,7 +70,7 @@ impl<'r> Vector<'r> {
 
     }
 
-    pub fn mul(&'r self, other: &Vector) -> Option<f64> {
+    pub fn mul(&self, other: &Vector) -> Option<f64> {
         // check for equal sizes
         if self.elements.len() != other.elements.len() {
             None
@@ -83,7 +83,7 @@ impl<'r> Vector<'r> {
         }
     }
 
-    pub fn sub(&'r self, other: &Vector) -> Option<Vector<'r>> {
+    pub fn sub(&self, other: &Vector) -> Option<Vector<'r>> {
         self.add(&other.scalar_mul(-1.0))
     }
 }
