@@ -16,11 +16,13 @@ impl<'r> Vector<'r> {
             elements: xs,
         }
     }
+
     pub fn ones(length: usize) -> Vector<'r> {
         let mut v = Vector::zeros(length);
         v.elements = v.elements.iter().map(|_| 1.0).collect();
         v
     }
+
     pub fn from_slice(xs: &[f64]) -> Vector<'r> {
         let mut ys: Vec<f64> = Vec::new();
         ys.push_all(xs);
@@ -28,12 +30,19 @@ impl<'r> Vector<'r> {
             elements: ys,
         }
     }
+
     pub fn len(self) -> usize {
         self.elements.len()
     }
-    pub fn iter<'r>(&'r self) -> Iter<'r, f64> {
+
+    pub fn iter(&'r self) -> Iter<'r, f64> {
         self.elements.iter()
     }
+
+    pub fn as_slice(&'r self) -> &'r [f64] {
+        self.elements.as_slice()
+    }
+
     pub fn add(self, other: Vector) -> Option<Vector<'r>> {
         // check for equal sizes
         if self.elements.len() != other.elements.len() {
@@ -48,6 +57,7 @@ impl<'r> Vector<'r> {
         }
 
     }
+
     pub fn scalar_mul(self, a: f64) -> Vector<'r> {
         let xs: Vec<f64> = self.elements
                                .iter()
@@ -57,6 +67,7 @@ impl<'r> Vector<'r> {
             elements: xs,
         }
     }
+
     pub fn mul(self, other: Vector) -> Option<f64> {
         // check for equal sizes
         if self.elements.len() != other.elements.len() {
