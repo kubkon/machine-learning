@@ -16,11 +16,11 @@ fn test_vector_addition() {
     let v1 = Vector::from_slice(&[1.0,2.0,3.0]);
     let v2 = Vector::from_slice(&[3.0,4.0,5.0]);
     let exp = Vector::from_slice(&[4.0,6.0,8.0]);
-    assert_eq!((v1 + v2).unwrap(), exp);
+    assert_eq!(v1.add(&v2).unwrap(), exp);
 
     let v3 = Vector::zeros(2);
     let v4 = Vector::zeros(3);
-    assert_eq!(v3 + v4, None);
+    assert_eq!(v3.add(&v4), None);
 }
 
 #[test]
@@ -35,7 +35,7 @@ fn test_vector_scalar_multiplication() {
 fn test_vector_multiplication() {
     let v1 = Vector::ones(3);
     let v2 = Vector::from_slice(&[1.0,2.0,3.0]);
-    assert_eq!((v1 * v2).unwrap(), 6.0);
+    assert_eq!(v1.mul(&v2).unwrap(), 6.0);
 }
 
 #[test]
@@ -43,7 +43,7 @@ fn test_vector_subtraction() {
     let v1 = Vector::zeros(3);
     let v2 = Vector::from_slice(&[1.0,2.0,3.0]);
     let exp = Vector::from_slice(&[-1.0,-2.0,-3.0]);
-    assert_eq!((v1 - v2).unwrap(), exp);
+    assert_eq!(v1.sub(&v2).unwrap(), exp);
 }
 
 #[test]

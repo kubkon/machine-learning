@@ -1,4 +1,3 @@
-use std::ops::{Add,Mul,Sub};
 use std::iter::repeat;
 use std::slice::Iter;
 
@@ -56,7 +55,7 @@ impl<'r> Vector<'r> {
         }
     }
 
-    pub fn _add(&'r self, other: &Vector) -> Option<Vector<'r>> {
+    pub fn add(&'r self, other: &Vector) -> Option<Vector<'r>> {
         // check for equal sizes
         if self.elements.len() != other.elements.len() {
             None
@@ -71,7 +70,7 @@ impl<'r> Vector<'r> {
 
     }
 
-    pub fn _mul(&'r self, other: &Vector) -> Option<f64> {
+    pub fn mul(&'r self, other: &Vector) -> Option<f64> {
         // check for equal sizes
         if self.elements.len() != other.elements.len() {
             None
@@ -84,8 +83,8 @@ impl<'r> Vector<'r> {
         }
     }
 
-    pub fn _sub(&'r self, other: &Vector) -> Option<Vector<'r>> {
-        self._add(&other.scalar_mul(-1.0))
+    pub fn sub(&'r self, other: &Vector) -> Option<Vector<'r>> {
+        self.add(&other.scalar_mul(-1.0))
     }
 }
 
@@ -104,26 +103,3 @@ impl<'r> PartialEq for Vector<'r> {
     }
 }
 
-impl<'r> Add for Vector<'r> {
-    type Output = Option<Vector<'r>>;
-
-    fn add(self, _rhs: Vector) -> Option<Vector<'r>> {
-        self._add(&_rhs)
-    }
-}
-
-impl<'r> Mul for Vector<'r> {
-    type Output = Option<f64>;
-
-    fn mul(self, _rhs: Vector) -> Option<f64> {
-        self._mul(&_rhs)
-    }
-}
-
-impl<'r> Sub for Vector<'r> {
-    type Output = Option<Vector<'r>>;
-
-    fn sub(self, _rhs: Vector) -> Option<Vector<'r>> {
-        self + _rhs.scalar_mul(-1.0)
-    }
-}
