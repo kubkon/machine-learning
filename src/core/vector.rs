@@ -54,36 +54,28 @@ impl<'r> Vector<'r> {
         }
     }
 
-    pub fn add(&self, other: &Vector) -> Option<Vector<'r>> {
+    pub fn add(&self, other: &Vector) -> Vector<'r> {
         // check for equal sizes
-        if self.elements.len() != other.elements.len() {
-            None
-        } else {
-            let xs: Vec<f64> = self.elements
-                                   .iter()
-                                   .zip(other.elements.iter())
-                                   .map(|(&x, &y)| x + y)
-                                   .collect();
-            Some(Vector::from_slice(&xs[]))
-        }
-
+        assert_eq!(self.elements.len(), other.elements.len());
+        let xs: Vec<f64> = self.elements
+                               .iter()
+                               .zip(other.elements.iter())
+                               .map(|(&x, &y)| x + y)
+                               .collect();
+        Vector::from_slice(&xs[])
     }
     
-    pub fn sub(&self, other: &Vector) -> Option<Vector<'r>> {
+    pub fn sub(&self, other: &Vector) -> Vector<'r> {
         self.add(&other.scalar_mul(-1.0))
     }
 
-    pub fn mul(&self, other: &Vector) -> Option<f64> {
+    pub fn mul(&self, other: &Vector) -> f64 {
         // check for equal sizes
-        if self.elements.len() != other.elements.len() {
-            None
-        } else {
-            let x: f64 = self.elements
-                             .iter()
-                             .zip(other.elements.iter())
-                             .fold(0.0, |acc, (&x, &y)| acc + x*y);
-            Some(x)
-        }
+        assert_eq!(self.elements.len(), other.elements.len());
+        self.elements
+            .iter()
+            .zip(other.elements.iter())
+            .fold(0.0, |acc, (&x, &y)| acc + x*y)
     }
 }
 
