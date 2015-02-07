@@ -1,5 +1,6 @@
 use std::iter::repeat;
 use std::slice::Iter;
+use std::fmt::{Display,Formatter,Result};
 
 #[derive(Debug)]
 pub struct Vector<'r> {
@@ -103,3 +104,8 @@ impl<'r> PartialEq for Vector<'r> {
     }
 }
 
+impl<'r> Display for Vector<'r> {
+    fn fmt(&self, f: &mut Formatter) -> Result {
+        write!(f, "Vector ( {:?} )", self.elements)
+    }
+}

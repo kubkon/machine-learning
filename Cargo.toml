@@ -7,3 +7,7 @@ authors = ["jakubkonka <jakub.konka@strath.ac.uk>"]
 name = "machinelearning"
 path = "src/lib.rs"
 
+[[bin]]
+name = "linear_regression"
+path = "examples/linear_regression.rs"
+

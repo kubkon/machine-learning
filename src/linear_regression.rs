@@ -1,5 +1,6 @@
 use std::num::Float;
 use vector::Vector;
+use std::fmt::{Display,Formatter,Result};
 
 #[derive(Debug)]
 pub struct LinearRegression<'r> {
@@ -36,13 +37,11 @@ impl<'r> LinearRegression<'r> {
         Vector::from_slice(&[d1, d2])
     }
 
-    pub fn fit(&mut self, xs: &[f64], ys: &[f64]) {
-        let xs_v = Vector::from_slice(xs);
-        let ys_v = Vector::from_slice(ys);
+    pub fn fit(&mut self, xs: &Vector, ys: &Vector) {
         let mut conv_param = 1.0f64;
 
         while conv_param > self.tolerance {
-            let gradient = self.cost_gradient(&xs_v, &ys_v);
+            let gradient = self.cost_gradient(xs, ys);
             let new_params = (self.params.sub(&gradient.scalar_mul(self.step))).unwrap();
             let params_diff = new_params.sub(&self.params)
                                         .unwrap();
@@ -51,5 +50,12 @@ impl<'r> LinearRegression<'r> {
                                     .sqrt();
             self.params = new_params;
         }
+    }
+}
+
+impl<'r> Display for LinearRegression<'r> {
+    fn fmt(&self, f: &mut Formatter) -> Result {
+        write!(f, "LinearRegression ( step={}, tolerance={}, parameters={} )",
+               self.step, self.tolerance, self.params)
     }
 }
