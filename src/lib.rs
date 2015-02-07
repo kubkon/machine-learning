@@ -2,8 +2,11 @@
 #![feature(core)]
 #![feature(collections)]
 
-pub mod vector;
-pub mod linear_regression;
+pub use core::vector::Vector;
+pub use linear_regression::LinearRegression;
+
+mod core;
+mod linear_regression;
 
 #[macro_use]
 mod macros;

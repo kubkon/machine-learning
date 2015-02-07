@@ -1,6 +1,6 @@
 use std::num::Float;
-use vector::Vector;
 use std::fmt::{Display,Formatter,Result};
+use Vector;
 
 #[derive(Debug)]
 pub struct LinearRegression<'r> {

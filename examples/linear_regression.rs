@@ -1,7 +1,6 @@
 extern crate machinelearning;
 
-use machinelearning::vector::Vector;
-use machinelearning::linear_regression::LinearRegression;
+use machinelearning::{LinearRegression,Vector};
 
 fn main() {
     let xs = Vector::from_slice(&[1.0,2.0,4.0,0.0]);
