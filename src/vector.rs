@@ -9,21 +9,19 @@ pub struct Vector<'r> {
 
 impl<'r> Vector<'r> {
     pub fn zeros(length: usize) -> Vector<'r> {
-        let xs: Vec<f64> = repeat(0.0).take(length)
-                                      .collect();
         Vector {
-            elements: xs,
+            elements: repeat(0.0).take(length).collect(),
         }
     }
 
     pub fn ones(length: usize) -> Vector<'r> {
-        let mut v = Vector::zeros(length);
-        v.elements = v.elements.iter().map(|_| 1.0).collect();
-        v
+        Vector {
+            elements: repeat(1.0).take(length).collect(),
+        }
     }
 
     pub fn from_slice(xs: &[f64]) -> Vector<'r> {
-        let mut ys: Vec<f64> = Vec::new();
+        let mut ys = Vec::new();
         ys.push_all(xs);
         Vector {
             elements: ys,

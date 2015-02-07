@@ -25,30 +25,27 @@ impl<'r> LinearRegression<'r> {
     }
 
     fn cost_func(&self, xs: &Vector, ys: &Vector) -> f64 {
-        let v = (self.model_func(xs).sub(ys)).unwrap();
+        let v = self.model_func(xs).sub(ys).unwrap();
         v.mul(&v).unwrap() / (2.0 * xs.len() as f64)
     }
 
     fn cost_gradient(&self, xs: &Vector, ys: &Vector) -> Vector<'r> {
         let n = xs.len();
-        let v = (self.model_func(xs).sub(ys)).unwrap().scalar_mul(1.0 / n as f64);
-        let d1 = (Vector::ones(n).mul(&v)).unwrap();
-        let d2 = (xs.mul(&v)).unwrap();
+        let v = self.model_func(xs).sub(ys).unwrap().scalar_mul(1.0 / n as f64);
+        let d1 = Vector::ones(n).mul(&v).unwrap();
+        let d2 = xs.mul(&v).unwrap();
         Vector::from_slice(&[d1, d2])
     }
 
     pub fn fit(&mut self, xs: &Vector, ys: &Vector) {
-        let mut conv_param = 1.0f64;
-
-        while conv_param > self.tolerance {
+        loop {
             let gradient = self.cost_gradient(xs, ys);
-            let new_params = (self.params.sub(&gradient.scalar_mul(self.step))).unwrap();
-            let params_diff = new_params.sub(&self.params)
-                                        .unwrap();
-            conv_param = params_diff.mul(&params_diff)
-                                    .unwrap()
-                                    .sqrt();
+            let new_params = self.params.sub(&gradient.scalar_mul(self.step)).unwrap();
+            let params_diff = new_params.sub(&self.params).unwrap();
             self.params = new_params;
+            if params_diff.mul(&params_diff).unwrap().sqrt() <= self.tolerance {
+                break;
+            }
         }
     }
 }
