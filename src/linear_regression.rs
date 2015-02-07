@@ -39,14 +39,17 @@ impl<'r> LinearRegression<'r> {
     pub fn fit(&mut self, xs: &[f64], ys: &[f64]) {
         let xs_v = Vector::from_slice(xs);
         let ys_v = Vector::from_slice(ys);
-        let mut cost_diff = 1.0f64;
+        let mut conv_param = 1.0f64;
 
-        while cost_diff > self.tolerance {
-            let priori = self.cost_func(&xs_v, &ys_v);
+        while conv_param > self.tolerance {
             let gradient = self.cost_gradient(&xs_v, &ys_v);
-            self.params = (self.params.sub(&gradient.scalar_mul(self.step))).unwrap();
-            let posteriori = self.cost_func(&xs_v, &ys_v);
-            cost_diff = (priori - posteriori).abs();
+            let new_params = (self.params.sub(&gradient.scalar_mul(self.step))).unwrap();
+            let params_diff = new_params.sub(&self.params)
+                                        .unwrap();
+            conv_param = params_diff.mul(&params_diff)
+                                    .unwrap()
+                                    .sqrt();
+            self.params = new_params;
         }
     }
 }
