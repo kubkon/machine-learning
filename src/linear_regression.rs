@@ -1,4 +1,3 @@
-use std::num::Float;
 use std::fmt::{Display,Formatter,Result};
 use Vector;
 use core::optimisation::gradient_descent;
