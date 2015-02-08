@@ -18,23 +18,31 @@ impl<'r> LinearRegression<'r> {
         }
     }
     
-    fn gradient_f(&self, xs: &Vector, ys: &Vector, params: &Vector) -> Vector<'r> {
-        let n = xs.len();
-        let v = Vector::ones(n).scalar_mul(params.get(0))
-                               .add(&xs.scalar_mul(params.get(1)))
-                               .sub(&ys)
-                               .scalar_mul(1.0 / n as f64);
-        let d1 = Vector::ones(n).mul(&v);
-        let d2 = xs.mul(&v);
-        Vector::from_slice(&[d1, d2])
+    fn gradient_f(&self, xs: &[Vector], ys: &Vector, params: &Vector) -> Vector<'r> {
+        let m = xs.len() as f64;
+        let n = params.len();
+        xs.iter()
+          .zip(ys.iter())
+          .map(|(x,&y)| x.scalar_mul((x.mul(&params) - y) / m))
+          .fold(Vector::zeros(n), |acc, x| acc.add(&x))
     }
 
-    pub fn fit(&mut self, xs: &Vector, ys: &Vector) {
+    fn extend_feature_vector(&self, xs: &[Vector]) -> Vec<Vector<'r>> {
+        xs.iter()
+          .map(|x| {
+              let mut v = vec![1.0];
+              v.push_all(x.as_slice());
+              Vector::from_slice(v.as_slice())
+          }).collect()
+    }
+
+    pub fn fit(&mut self, xs: &[Vector], ys: &Vector) {
+        let xs_ext = self.extend_feature_vector(xs);
         self.params = gradient_descent(
             self.learning_rate,
             self.tolerance,
             &self.params,
-            |&: params: &Vector| -> Vector<'r> { self.gradient_f(xs, ys, params) }
+            |&: params: &Vector| -> Vector<'r> { self.gradient_f(xs_ext.as_slice(), ys, params) }
         );
     }
 }
