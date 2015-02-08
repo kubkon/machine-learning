@@ -28,12 +28,13 @@ impl<'r> LinearRegression<'r> {
     }
 
     fn extend_feature_vector(&self, xs: &[Vector]) -> Vec<Vector<'r>> {
-        xs.iter()
-          .map(|x| {
-              let mut v = vec![1.0];
-              v.push_all(x.as_slice());
-              Vector::from_slice(v.as_slice())
-          }).collect()
+        let mut xs_ext = Vec::new();
+        for x in xs.iter() {
+            let mut tmp = x.clone();
+            tmp.insert(0, 1.0);
+            xs_ext.push(tmp);
+        }
+        xs_ext
     }
 
     pub fn fit(&mut self, xs: &[Vector], ys: &Vector) {

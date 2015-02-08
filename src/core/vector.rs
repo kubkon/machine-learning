@@ -43,6 +43,10 @@ impl<'r> Vector<'r> {
     pub fn get(&self, index: usize) -> f64 {
         self.elements[index]
     }
+
+    pub fn insert(&mut self, index: usize, element: f64) {
+        self.elements.insert(index, element);
+    }
     
     pub fn scalar_mul(&self, a: f64) -> Vector<'r> {
         let xs: Vec<f64> = self.elements
