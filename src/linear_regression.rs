@@ -10,11 +10,11 @@ pub struct LinearRegression<'r> {
 }
 
 impl<'r> LinearRegression<'r> {
-    pub fn new(learning_rate: f64) -> LinearRegression<'r> {
+    pub fn new(learning_rate: f64, init_params: &Vector) -> LinearRegression<'r> {
         LinearRegression {
             learning_rate: learning_rate,
             tolerance: 1e-6,
-            params: Vector::zeros(2),
+            params: init_params.clone(),
         }
     }
     
