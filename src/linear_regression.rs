@@ -3,14 +3,14 @@ use Vector;
 use core::optimisation::gradient_descent;
 
 #[derive(Debug)]
-pub struct LinearRegression<'r> {
+pub struct LinearRegression {
     pub learning_rate: f64,
     pub tolerance: f64,
-    pub params: Vector<'r>,
+    pub params: Vector,
 }
 
-impl<'r> LinearRegression<'r> {
-    pub fn new(learning_rate: f64, init_params: &Vector) -> LinearRegression<'r> {
+impl LinearRegression {
+    pub fn new(learning_rate: f64, init_params: &Vector) -> LinearRegression {
         LinearRegression {
             learning_rate: learning_rate,
             tolerance: 1e-6,
@@ -18,7 +18,7 @@ impl<'r> LinearRegression<'r> {
         }
     }
     
-    fn gradient_f(&self, xs: &[Vector], ys: &Vector, params: &Vector) -> Vector<'r> {
+    fn gradient_f(&self, xs: &[Vector], ys: &Vector, params: &Vector) -> Vector {
         let m = xs.len() as f64;
         let n = params.len();
         xs.iter()
@@ -27,7 +27,7 @@ impl<'r> LinearRegression<'r> {
           .fold(Vector::zeros(n), |acc, x| acc.add(&x))
     }
 
-    fn extend_feature_vector(&self, xs: &[Vector]) -> Vec<Vector<'r>> {
+    fn extend_feature_vector(&self, xs: &[Vector]) -> Vec<Vector> {
         let mut xs_ext = Vec::new();
         for x in xs.iter() {
             let mut tmp = x.clone();
@@ -43,12 +43,12 @@ impl<'r> LinearRegression<'r> {
             self.learning_rate,
             self.tolerance,
             &self.params,
-            |&: params: &Vector| -> Vector<'r> { self.gradient_f(xs_ext.as_slice(), ys, params) }
+            |&: params: &Vector| -> Vector { self.gradient_f(xs_ext.as_slice(), ys, params) }
         );
     }
 }
 
-impl<'r> Display for LinearRegression<'r> {
+impl Display for LinearRegression {
     fn fmt(&self, f: &mut Formatter) -> Result {
         write!(f, "LinearRegression ( learning_rate={}, tolerance={}, parameters={} )",
                self.learning_rate,
