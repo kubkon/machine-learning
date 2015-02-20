@@ -29,7 +29,7 @@ impl LinearRegression {
 
     fn extend_feature_vector(&self, xs: &[Vector]) -> Vec<Vector> {
         let mut xs_ext = Vec::new();
-        for x in xs.iter() {
+        for x in xs {
             let mut tmp = x.clone();
             tmp.insert(0, 1.0);
             xs_ext.push(tmp);
