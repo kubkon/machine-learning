@@ -22,7 +22,9 @@ impl Vector {
 
     pub fn from_slice(xs: &[f64]) -> Vector {
         let mut ys = Vec::new();
-        ys.push_all(xs);
+        for &x in xs.iter() {
+            ys.push(x);
+        }
         Vector {
             elements: ys,
         }
@@ -37,7 +39,7 @@ impl Vector {
     }
 
     pub fn as_slice(&self) -> &[f64] {
-        self.elements.as_slice()
+        &self.elements[..]
     }
 
     pub fn get(&self, index: usize) -> f64 {

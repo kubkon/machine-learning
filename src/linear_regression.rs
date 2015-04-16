@@ -43,7 +43,7 @@ impl LinearRegression {
             self.learning_rate,
             self.tolerance,
             &self.params,
-            |&: params: &Vector| -> Vector { self.gradient_f(xs_ext.as_slice(), ys, params) }
+            |params: &Vector| -> Vector { self.gradient_f(&xs_ext[..], ys, params) }
         );
     }
 }

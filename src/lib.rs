@@ -1,6 +1,4 @@
 #![crate_name = "machinelearning"]
-#![feature(core)]
-#![feature(collections)]
 
 pub use core::vector::Vector;
 pub use linear_regression::LinearRegression;

@@ -1,4 +1,3 @@
-use std::num::Float;
 use Vector;
 
 pub fn gradient_descent<F>(step_size: f64,
